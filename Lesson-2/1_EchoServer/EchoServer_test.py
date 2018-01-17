@@ -17,6 +17,7 @@
 # then run the "test.py" script to check your work.
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import urlparse,parse_qs
 
 class EchoHandler(BaseHTTPRequestHandler):
     def do_GET(self):
