@@ -28,7 +28,6 @@ form = '''<!DOCTYPE html>
 </form>
 '''
 
-
 class NameHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         # How long was the post data?
@@ -40,10 +39,14 @@ class NameHandler(BaseHTTPRequestHandler):
 
         # Create cookie.
         c = cookies.SimpleCookie()
-
+        c["yourname"]=yourname
+        c["yourname"]["domain"]="localhost"
+        c["yourname"]["max-age"]= 600
+        print(c['yourname'].OutputString())
         # 1. Set the fields of the cookie.
         #    Give the cookie a value from the 'yourname' variable,
         #    a domain (localhost), and a max-age.
+
 
         # Send a 303 back to the root page, with a cookie!
         self.send_response(303)  # redirect via GET
@@ -61,6 +64,9 @@ class NameHandler(BaseHTTPRequestHandler):
                 # 2. Extract and decode the cookie.
                 #    Get the cookie from the headers and extract its value
                 #    into a variable called 'name'.
+                print(self.headers)
+                in_cookie = cookies.SimpleCookie(self.headers["Cookie"])
+                name = in_cookie["yourname"].value
 
                 # Craft a message, escaping any HTML special chars in name.
                 message = "Hey there, " + html_escape(name)
